@@ -121,29 +121,11 @@ function IntegratedEditor({ input, change }: Edit<Inputs['integrated']>) {
   </>
 }
 
-function ArrheniusEditor({ input, change }: Edit<Inputs['arrhenius']>) {
-  const temperatureUnit = input.unit === 'K' ? 'K' : '°C'
-  return <>
-    <Segmented label="Objetivo do cálculo" value={input.mode} choices={[['predict', 'Calcular k'], ['fit', 'Ajustar dados']]} onChange={(mode) => change({ ...input, mode })} />
-    <div className="field-grid">
-      <Field label="Unidade da temperatura"><select value={input.unit} onChange={(event) => change({ ...input, unit: event.target.value as 'K' | 'C' })}><option value="K">Kelvin (K)</option><option value="C">Celsius (°C)</option></select></Field>
-      <Field label="Unidade de k e A"><Input value={input.kUnit} onChange={(kUnit) => change({ ...input, kUnit })} /></Field>
-    </div>
-    {input.mode === 'fit' ? <Matrix rows={input.rows} labels={['Temperatura (' + temperatureUnit + ')', 'Constante k']}
-      change={(rows) => change({ ...input, rows })} /> : <>
-      <Field label={'Temperatura (' + temperatureUnit + ')'}><Input numeric value={input.temperature} onChange={(temperature) => change({ ...input, temperature })} /></Field>
-      <Field label="Fator pré-exponencial (A)"><Input numeric value={input.prefactor} onChange={(prefactor) => change({ ...input, prefactor })} /></Field>
-      <Field label="Energia de ativação (kJ/mol)"><Input numeric value={input.activation} onChange={(activation) => change({ ...input, activation })} /></Field>
-    </>}
-  </>
-}
-
 export function Editor({ experiment, change }: { experiment: Experiment; change: (value: Experiment) => void }) {
   switch (experiment.module) {
     case 'rate': return <RateEditor input={experiment.input} change={(input) => change({ module: 'rate', input })} />
     case 'experimental': return <ExperimentalEditor input={experiment.input} change={(input) => change({ module: 'experimental', input })} />
     case 'mechanism': return <MechanismEditor input={experiment.input} change={(input) => change({ module: 'mechanism', input })} />
     case 'integrated': return <IntegratedEditor input={experiment.input} change={(input) => change({ module: 'integrated', input })} />
-    case 'arrhenius': return <ArrheniusEditor input={experiment.input} change={(input) => change({ module: 'arrhenius', input })} />
   }
 }

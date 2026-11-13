@@ -14,8 +14,4 @@ export const examples: { title: string; description: string; experiment: Experim
     } } },
   { title: 'Decaimento de primeira ordem', description: 'Compare a curva de concentração com a meia-vida da reação.',
     experiment: { module: 'integrated', input: startingInputs.integrated } },
-  { title: 'Dependência da temperatura', description: 'Calcule k a partir da energia de ativação e da temperatura absoluta.',
-    experiment: { module: 'arrhenius', input: startingInputs.arrhenius } },
-  { title: 'Ajuste de Arrhenius', description: 'Determine a energia de ativação e o fator pré-exponencial com quatro medidas.',
-    experiment: { module: 'arrhenius', input: { ...startingInputs.arrhenius, mode: 'fit' } } },
 ]

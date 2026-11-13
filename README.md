@@ -28,14 +28,13 @@ A prévia de produção usa o caminho /cinelab/. Para testar em um telefone na m
 | Dados experimentais | Estima ordens reais e k de medidas de velocidade inicial. O ajuste usa mínimos quadrados de ln v em função de ln das concentrações, com decomposição QR. |
 | Mecanismos reacionais | Simula concentrações por ação das massas a partir das constantes elementares fornecidas. Aceita até 12 espécies e 24 etapas reversíveis ou irreversíveis. |
 | Leis integradas | Calcula concentração e meia-vida para ordens zero, primeira e segunda, usando a lei diferencial para uma única espécie. |
-| Equação de Arrhenius | Prevê k em uma temperatura ou ajusta ln k em função de 1/T para obter Ea e A. |
 
 A biblioteca traz exemplos carregáveis, incluindo etapas consecutivas e equilíbrio reversível. Cada cálculo mostra a equação, o passo a passo e os resultados com unidades. Digite números com vírgula ou ponto decimal. A notação científica, como 1e-6, também é aceita.
 
 ### Convenções e limites científicos
 
-- As concentrações são expressas em mol/L, os tempos em segundos e as velocidades em mol/L/s. Em Arrhenius, informe Ea em kJ/mol e use uma unidade consistente para todas as medidas de k e para A. O cálculo converte as temperaturas para kelvin.
-- Para estimar n ordens e k, informe pelo menos n + 1 ensaios com concentrações positivas e independentes entre si. O ajuste de Arrhenius exige duas temperaturas distintas ou mais. Use ensaios adicionais para avaliar os resíduos. O R² é calculado em escala logarítmica.
+- As concentrações são expressas em mol/L, os tempos em segundos e as velocidades em mol/L/s.
+- Para estimar n ordens e k, informe pelo menos n + 1 ensaios com concentrações positivas e independentes entre si. Use ensaios adicionais para avaliar os resíduos. O R² é calculado em escala logarítmica.
 - Cadastre cada espécie do mecanismo e escreva as etapas no formato 2 A + B. Separe os termos com espaços ao redor do sinal de adição. Use 0 para representar uma fonte ou sumidouro. A estequiometria é fornecida pelo usuário.
 - A simulação adota ação das massas em concentração, com sistema bem misturado, volume fixo e constantes invariáveis durante a execução. Dormand–Prince 5(4) controla o erro local com tolerâncias relativa e absoluta, reduz o passo diante de concentrações negativas relevantes e limita cada simulação a 15.000 tentativas. O método é explícito e pode atingir o limite em problemas rígidos.
 - O ajuste experimental determina parâmetros da lei de velocidade global. As constantes de cada etapa elementar são entradas do simulador. Os testes comparam a integração com as soluções analíticas dos mecanismos consecutivo, reversível e de segunda ordem.

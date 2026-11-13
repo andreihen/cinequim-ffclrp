@@ -3,7 +3,6 @@ export const moduleNames = {
   experimental: 'Dados experimentais',
   mechanism: 'Mecanismos reacionais',
   integrated: 'Leis integradas',
-  arrhenius: 'Equação de Arrhenius',
 }
 
 export type ModuleId = keyof typeof moduleNames
@@ -25,15 +24,6 @@ export interface Inputs {
     samples: string
   }
   integrated: { order: '0' | '1' | '2'; initial: string; k: string; time: string }
-  arrhenius: {
-    mode: 'predict' | 'fit'
-    unit: 'K' | 'C'
-    temperature: string
-    prefactor: string
-    activation: string
-    kUnit: string
-    rows: string[][]
-  }
 }
 
 export type Experiment = {
@@ -63,10 +53,6 @@ export const startingInputs: Inputs = {
     duration: '15', relativeTolerance: '1e-6', absoluteTolerance: '1e-9', samples: '121',
   },
   integrated: { order: '1', initial: '1', k: '0,35', time: '12' },
-  arrhenius: {
-    mode: 'predict', unit: 'K', temperature: '310', prefactor: '1e9', activation: '65', kUnit: 's⁻¹',
-    rows: [['290', '0,001947'], ['300', '0,004795'], ['310', '0,01109'], ['320', '0,02443']],
-  },
 }
 
 const object = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -93,9 +79,6 @@ export function isExperiment(value: unknown): value is Experiment {
           fields(row, ['reactants', 'products', 'forward', 'reverse']))
     case 'integrated':
       return ['0', '1', '2'].some((order) => order === input.order) && fields(input, ['initial', 'k', 'time'])
-    case 'arrhenius':
-      return ['predict', 'fit'].some((mode) => mode === input.mode) && (input.unit === 'K' || input.unit === 'C') &&
-        fields(input, ['temperature', 'prefactor', 'activation', 'kUnit']) && matrix(input.rows, 2)
     default: return false
   }
 }

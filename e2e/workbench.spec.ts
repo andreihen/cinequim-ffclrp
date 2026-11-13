@@ -70,15 +70,10 @@ test('salva, restaura, importa e exporta um cálculo', async ({ page }) => {
   await expect(page.getByRole('article')).toHaveCount(1)
 })
 
-test('executa as leis integradas e o ajuste de Arrhenius', async ({ page }) => {
+test('executa as leis integradas', async ({ page }) => {
   await page.goto('./#integrated')
   await page.getByRole('button', { name: 'Calcular concentração' }).click()
   await expect(page.getByText('Meia-vida', { exact: true })).toBeVisible()
   await expect(page.locator('.recharts-line-curve')).toHaveCount(1)
-  await navigate(page, 'Equação de Arrhenius')
-  await page.getByRole('button', { name: 'Ajustar dados' }).click()
-  await page.getByRole('button', { name: 'Calcular Arrhenius' }).click()
-  await expect(page.getByText('Energia de ativação', { exact: true })).toBeVisible()
-  await expect(page.locator('.recharts-scatter-symbol')).toHaveCount(4)
   await expectNoOverflow(page)
 })

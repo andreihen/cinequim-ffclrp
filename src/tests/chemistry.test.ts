@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest'
-import { arrheniusRate, fitArrhenius, kelvinFrom } from '../chemistry/arrhenius'
 import { fitRateLaw } from '../chemistry/experimentalData'
 import { concentrationAt, halfLife } from '../chemistry/integratedLaws'
 import { calculateRate, determineK, rateConstantUnit } from '../chemistry/rateLaws'
@@ -94,22 +93,13 @@ describe('mecanismos e resolvedor', () => {
   })
 })
 
-describe('leis integradas e Arrhenius', () => {
+describe('leis integradas', () => {
   it('avalia as três ordens e suas meias-vidas', () => {
     for (const order of [0, 1, 2] as const) {
       expect(concentrationAt(order, 2, 0.5, halfLife(order, 2, 0.5))).toBeCloseTo(1, 12)
     }
     expect(concentrationAt(0, 2, 0.5, 10)).toBe(0)
     expect(() => concentrationAt(1, 2, 0.5, -1)).toThrow()
-  })
-  it('prevê k e recupera Ea e A a partir de medidas em kelvin', () => {
-    expect(kelvinFrom(26.85, 'C')).toBeCloseTo(300, 12)
-    expect(arrheniusRate(1e9, 65, 300)).toBeCloseTo(0.0048163233988, 12)
-    const fit = fitArrhenius([280, 300, 330, 400].map((kelvin) => ({ kelvin, k: arrheniusRate(1e9, 65, kelvin) })))
-    expect(fit.activationKJ).toBeCloseTo(65, 10)
-    expect(fit.prefactor / 1e9).toBeCloseTo(1, 10)
-    expect(() => kelvinFrom(-273.15, 'C')).toThrow()
-    expect(() => fitArrhenius([{ kelvin: 300, k: 1 }, { kelvin: 300, k: 2 }])).toThrow(/insuficientes/)
   })
 })
 

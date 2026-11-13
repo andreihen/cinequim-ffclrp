@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import {
   Activity, ArrowRight, BookOpen, Calculator, ChevronRight, Clock3, Download, FlaskConical,
-  FolderOpen, GitBranch, Menu, Moon, RotateCcw, Save, Sun, Table2, Thermometer, Upload, X,
+  FolderOpen, GitBranch, Menu, Moon, RotateCcw, Save, Sun, Table2, Upload, X,
 } from 'lucide-react'
 import { Remove } from './components/Fields'
 import { Results } from './components/Results'
@@ -16,7 +16,6 @@ const modules = {
   experimental: { icon: Table2, action: 'Ajustar lei de velocidade', description: 'Determine as ordens de reação e a constante k a partir de medidas de velocidade inicial.', formula: '\\ln v = \\ln k + \\sum_i n_i\\ln[C_i]' },
   mechanism: { icon: GitBranch, action: 'Simular mecanismo', description: 'Combine etapas elementares e acompanhe como as concentrações evoluem ao longo do tempo.', formula: '\\frac{d[C_i]}{dt} = \\sum_j \\nu_{ij}\\left(v_j^+ - v_j^-\\right)' },
   integrated: { icon: Activity, action: 'Calcular concentração', description: 'Obtenha a concentração e a meia-vida para reações de ordem zero, primeira e segunda.', formula: '-\\frac{d[A]}{dt} = k[A]^n' },
-  arrhenius: { icon: Thermometer, action: 'Calcular Arrhenius', description: 'Explore como a temperatura afeta a constante cinética e ajuste dados para determinar a energia de ativação.', formula: 'k = A\\,\\exp\\left(-\\frac{E_a}{RT}\\right)' },
 }
 
 const library = {

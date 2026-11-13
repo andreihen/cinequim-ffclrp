@@ -1,9 +1,8 @@
-import { arrheniusRate, fitArrhenius, GAS_CONSTANT, kelvinFrom } from '../chemistry/arrhenius'
 import { fitRateLaw } from '../chemistry/experimentalData'
 import { concentrationAt, halfLife, type IntegratedOrder } from '../chemistry/integratedLaws'
 import { calculateRate, determineK, rateConstantUnit } from '../chemistry/rateLaws'
 import { simulateMechanism } from '../chemistry/reactionMechanisms'
-import { numberFrom as number, speciesNames, positive } from '../chemistry/validations'
+import { numberFrom as number, speciesNames } from '../chemistry/validations'
 import { type Experiment } from './experiments'
 
 type Cell = string | number
@@ -161,49 +160,6 @@ export function calculate(experiment: Experiment): Result {
         parameters: [['Ordem', order], ['[A] inicial (mol/L)', initial], ['k (' + rateConstantUnit(order) + ')', k], ['Tempo (s)', time]],
         csv: [['Tempo (s)', '[A] (mol/L)', 'Meia-vida (s)'], ...times.map((t, i) => [t, series[i], lifetime])],
         chart: { x: 'Tempo (s)', y: 'Concentração (mol L⁻¹)', series: [axis('[A]', series, times)] },
-      }
-    }
-    case 'arrhenius': {
-      const { mode, unit, kUnit, rows, ...input } = experiment.input
-      const label = kUnit.trim()
-      if (!label) throw new Error('Informe a unidade de k e do fator pré-exponencial.')
-      const equation = 'k = A\\,\\exp\\left(-\\frac{E_a}{RT}\\right)'
-      const toKelvin = (value: string) => kelvinFrom(number(value, 'Temperatura'), unit)
-      if (mode === 'fit') {
-        const observations = rows.map(([temperature, k]) => ({ kelvin: toKelvin(temperature), k: positive(number(k, 'Constante k'), 'Constante k') }))
-        const fit = fitArrhenius(observations)
-        const xs = observations.map(({ kelvin }) => 1 / kelvin)
-        const sorted = xs.map((x, i) => ({ x, y: fit.predicted[i] })).sort((a, b) => a.x - b.x)
-        return {
-          metrics: [
-            { label: 'Energia de ativação', value: fit.activationKJ, unit: 'kJ mol⁻¹' },
-            { label: 'Fator pré-exponencial', value: fit.prefactor, unit: label },
-            { label: 'R² em log', value: fit.rSquared ?? 'Indefinido' },
-          ],
-          equation: '\\ln k = \\ln A - \\frac{E_a}{R}\\frac{1}{T}',
-          steps: [
-            { title: 'Converta T para kelvin e calcule 1/T', text: fit.residualDegrees === 0 ? 'Com dois pontos, o ajuste tem zero graus de liberdade residuais.' : undefined },
-            { title: 'Ajuste ln k em função de 1/T', formula: 'm = ' + tex(fit.coefficients[0]) + ',\\qquad b = ' + tex(fit.intercept) },
-            { title: 'Recupere a energia de ativação e o fator pré-exponencial', formula: 'E_a = -mR,\\qquad A = e^b' },
-          ],
-          parameters: [['Temperatura (K)', 'k (' + label + ')'], ...observations.map(({ kelvin, k }) => [kelvin, k])],
-          csv: [['Temperatura (K)', '1/T (K⁻¹)', 'k observado (' + label + ')', 'ln k ajustado', 'Ea (kJ/mol)', 'A (' + label + ')'], ...observations.map((row, i) => [row.kelvin, xs[i], row.k, fit.predicted[i], fit.activationKJ, fit.prefactor])],
-          chart: { x: '1/T (K⁻¹)', y: 'ln k', series: [{ name: 'Ajuste', points: sorted }, { ...axis('Medidas', observations.map(({ k }) => Math.log(k)), xs), kind: 'points' }] },
-        }
-      }
-      const kelvin = toKelvin(input.temperature)
-      const prefactor = number(input.prefactor, 'Fator pré-exponencial')
-      const activation = number(input.activation, 'Energia de ativação')
-      const k = arrheniusRate(prefactor, activation, kelvin)
-      return {
-        metrics: [{ label: 'Constante de velocidade', value: k, unit: label }, { label: 'Temperatura absoluta', value: kelvin, unit: 'K' }],
-        equation,
-        steps: [
-          { title: 'Use temperatura absoluta e converta a energia para joules', formula: 'T = ' + tex(kelvin) + '\\,\\mathrm{K},\\qquad E_a = ' + tex(activation) + '\\,\\mathrm{kJ\\,mol^{-1}}' },
-          { title: 'Substitua na equação de Arrhenius', formula: 'k = ' + tex(prefactor) + '\\,e^{-(' + tex(activation) + '\\cdot10^3)/(' + tex(GAS_CONSTANT) + '\\cdot ' + tex(kelvin) + ')} = ' + tex(k) },
-        ],
-        parameters: [['Temperatura (K)', kelvin], ['Fator A (' + label + ')', prefactor], ['Energia de ativação (kJ/mol)', activation]],
-        csv: [['Temperatura (K)', 'k (' + label + ')', 'A (' + label + ')', 'Ea (kJ/mol)'], [kelvin, k, prefactor, activation]],
       }
     }
   }
