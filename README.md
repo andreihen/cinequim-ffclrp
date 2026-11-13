@@ -1,4 +1,4 @@
-# CineLab
+# CineQUIM - FFCLRP
 
 Laboratório Interativo de Cinética Química. Aplicação estática em React e TypeScript. Os cálculos, as fórmulas em KaTeX e os gráficos em Recharts são processados no navegador.
 
@@ -18,7 +18,7 @@ npm run build
 npm run preview
 ~~~
 
-A prévia de produção usa o caminho /cinelab/. Para testar em um telefone na mesma rede, inicie o Vite com `npm run dev -- --host` e use no telefone o endereço de rede exibido.
+A prévia de produção usa o caminho /cinequim-ffclrp/. Para testar em um telefone na mesma rede, inicie o Vite com `npm run dev -- --host` e use no telefone o endereço de rede exibido.
 
 ## Módulos
 
@@ -56,19 +56,19 @@ O Playwright verifica a versão de produção em Chromium nos perfis de desktop 
 
 ## Publicar no GitHub Pages
 
-1. Crie um repositório no GitHub, por exemplo cinelab. Use um repositório vazio se for enviar este projeto como primeiro commit.
+1. Crie um repositório no GitHub, por exemplo cinequim-ffclrp. Use um repositório vazio se for enviar este projeto como primeiro commit.
 2. Inicialize o Git e envie os arquivos para a branch main. Substitua USUARIO pelo proprietário do repositório.
 
    ~~~sh
    git init -b main
    git add .
-   git commit -m "Implementa o CineLab"
-   git remote add origin https://github.com/USUARIO/cinelab.git
+   git commit -m "Implementa o CineQUIM - FFCLRP"
+   git remote add origin https://github.com/USUARIO/cinequim-ffclrp.git
    git push -u origin main
    ~~~
 
 3. No repositório, abra **Settings → Pages** e selecione **GitHub Actions** como origem da publicação.
 4. Na aba **Actions**, execute **Testar e publicar no GitHub Pages** pela opção **Run workflow**. Os próximos pushes para main disparam o mesmo fluxo.
-5. Ao concluir, abra a URL exibida em **Settings → Pages**, por exemplo `https://USUARIO.github.io/cinelab/`.
+5. Ao concluir, abra a URL exibida em **Settings → Pages**, por exemplo `https://USUARIO.github.io/cinequim-ffclrp/`.
 
 O workflow usa o caminho retornado pela configuração do Pages, inclusive para repositórios com outro nome. A navegação usa fragmentos da URL, o que permite abrir os módulos diretamente no GitHub Pages. Consulte a [documentação de publicação estática do Vite](https://vite.dev/guide/static-deploy.html#github-pages).

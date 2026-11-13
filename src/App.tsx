@@ -148,7 +148,7 @@ function App() {
   }
 
   function exportJson(next: Experiment) {
-    download(serializeExperiment({ module: next.module, input: next.input } as Experiment), 'cinelab-' + next.module + '.json', 'application/json')
+    download(serializeExperiment({ module: next.module, input: next.input } as Experiment), 'cinequim-ffclrp-' + next.module + '.json', 'application/json')
   }
 
   const openFile = () => fileInput.current?.click()
@@ -166,9 +166,9 @@ function App() {
     <aside className={'sidebar ' + (menu ? 'sidebar-open' : '')} id="sidebar">
       <a className="brand" href="#rate" onClick={(event) => { event.preventDefault(); navigate('rate') }}>
         <span className="brand-icon"><FlaskConical size={24} strokeWidth={2.15} /></span>
-        <span><strong>Cine<span>Lab</span></strong><small>Cinética química</small></span>
+        <span><strong>Cine<span>QUIM</span><span className="brand-campus"> - FFCLRP</span></strong><small>Cinética química</small></span>
       </a>
-      <nav aria-label="Módulos do CineLab">
+      <nav aria-label="Módulos do CineQUIM - FFCLRP">
         <div className="nav-group"><p>LABORATÓRIO</p>
           {moduleIds.map((id) => {
             const Icon = modules[id].icon
@@ -236,7 +236,7 @@ function App() {
             </section>
             <div ref={resultArea} className="results-anchor">
               <Results result={result} equation={modules[experiment.module].formula} version={output?.version ?? 0}
-                exportCsv={() => { if (result) download(csv(result.csv), 'cinelab-' + experiment.module + '.csv', 'text/csv;charset=utf-8') }} />
+                exportCsv={() => { if (result) download(csv(result.csv), 'cinequim-ffclrp-' + experiment.module + '.csv', 'text/csv;charset=utf-8') }} />
             </div>
           </div>
           <div className="workspace-footer">
@@ -246,7 +246,7 @@ function App() {
         </> : <>
           <section className="hero"><div className="hero-content">
             <h1>{title}</h1>
-            <p className="hero-description">{page === 'examples' ? 'Carregue um cenário para demonstrar os cálculos do CineLab.' : 'Abra um experimento armazenado neste navegador.'}</p>
+            <p className="hero-description">{page === 'examples' ? 'Carregue um cenário para demonstrar os cálculos do CineQUIM - FFCLRP.' : 'Abra um experimento armazenado neste navegador.'}</p>
           </div></section>
           {page === 'examples' ? <div className="example-grid">{examples.map(({ title: label, description, experiment: example }) => {
             const Icon = modules[example.module].icon

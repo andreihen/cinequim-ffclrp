@@ -63,6 +63,7 @@ svg { flex-shrink: 0; }
 .brand-icon { @apply grid h-11 w-11 shrink-0 place-items-center rounded-xl; background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-line); }
 .brand strong { @apply block text-[25px] leading-none; font-family: var(--display); letter-spacing: -.06em; }
 .brand strong span { color: var(--accent); }
+.brand strong .brand-campus { color: var(--text); font-size: .6em; letter-spacing: -.02em; white-space: nowrap; }
 .brand small { @apply mt-1 block text-xs; color: var(--muted); }
 .sidebar nav { @apply flex-1 overflow-y-auto px-3.5 py-4; }
 .nav-group + .nav-group { margin-top: 28px; }

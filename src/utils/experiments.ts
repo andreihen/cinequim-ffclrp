@@ -89,15 +89,15 @@ export function isRecord(value: unknown): value is RecordEntry {
 }
 
 export function serializeExperiment(experiment: Experiment) {
-  return JSON.stringify({ format: 'CineLab', version: 1, experiment }, null, 2)
+  return JSON.stringify({ format: 'CineQUIM - FFCLRP', version: 1, experiment }, null, 2)
 }
 
 export async function readExperiment(file: File): Promise<Experiment> {
   if (file.size > 200_000) throw new Error('O arquivo JSON deve ter até 200 KB.')
   let value: unknown
   try { value = JSON.parse(await file.text()) } catch { throw new Error('O arquivo não contém JSON válido.') }
-  if (!object(value) || value.format !== 'CineLab' || value.version !== 1 || !isExperiment(value.experiment)) {
-    throw new Error('Formato incompatível. Selecione um experimento exportado pelo CineLab (versão 1).')
+  if (!object(value) || (value.format !== 'CineQUIM - FFCLRP' && value.format !== 'CineLab') || value.version !== 1 || !isExperiment(value.experiment)) {
+    throw new Error('Formato incompatível. Selecione um experimento exportado pelo CineQUIM - FFCLRP (versão 1).')
   }
   return value.experiment
 }
