@@ -166,9 +166,9 @@ function App() {
     <aside className={'sidebar ' + (menu ? 'sidebar-open' : '')} id="sidebar">
       <a className="brand" href="#rate" onClick={(event) => { event.preventDefault(); navigate('rate') }}>
         <span className="brand-icon"><FlaskConical size={24} strokeWidth={2.15} /></span>
-        <span><strong>Cine<span>QUIM</span><span className="brand-campus"> - FFCLRP</span></strong><small>Cinética química</small></span>
+        <span><strong>cine<span>QUIM</span><span className="brand-campus"> - FFCLRP</span></strong><small>Cinética química</small></span>
       </a>
-      <nav aria-label="Módulos do CineQUIM - FFCLRP">
+      <nav aria-label="Módulos do cineQUIM - FFCLRP">
         <div className="nav-group"><p>LABORATÓRIO</p>
           {moduleIds.map((id) => {
             const Icon = modules[id].icon
@@ -246,7 +246,7 @@ function App() {
         </> : <>
           <section className="hero"><div className="hero-content">
             <h1>{title}</h1>
-            <p className="hero-description">{page === 'examples' ? 'Carregue um cenário para demonstrar os cálculos do CineQUIM - FFCLRP.' : 'Abra um experimento armazenado neste navegador.'}</p>
+            <p className="hero-description">{page === 'examples' ? 'Carregue um cenário para demonstrar os cálculos do cineQUIM - FFCLRP.' : 'Abra um experimento armazenado neste navegador.'}</p>
           </div></section>
           {page === 'examples' ? <div className="example-grid">{examples.map(({ title: label, description, experiment: example }) => {
             const Icon = modules[example.module].icon

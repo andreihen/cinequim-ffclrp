@@ -1,4 +1,4 @@
-# CineQUIM - FFCLRP
+# cineQUIM - FFCLRP
 
 Laboratório Interativo de Cinética Química. Aplicação estática em React e TypeScript. Os cálculos, as fórmulas em KaTeX e os gráficos em Recharts são processados no navegador.
 
@@ -62,7 +62,7 @@ O Playwright verifica a versão de produção em Chromium nos perfis de desktop 
    ~~~sh
    git init -b main
    git add .
-   git commit -m "Implementa o CineQUIM - FFCLRP"
+   git commit -m "Implementa o cineQUIM - FFCLRP"
    git remote add origin https://github.com/USUARIO/cinequim-ffclrp.git
    git push -u origin main
    ~~~
