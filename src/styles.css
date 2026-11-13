@@ -100,6 +100,14 @@ svg { flex-shrink: 0; }
 .hero-content { @apply min-w-0; }
 .hero-kicker { @apply mb-3 flex items-center gap-2 text-[10px] font-bold uppercase; color: #65e6bc; letter-spacing: .1em; }
 .hero h1 { @apply m-0 text-[clamp(1.9rem,4vw,3rem)] font-bold leading-[1.06]; font-family: var(--display); letter-spacing: -.045em; }
+.academic-header { @apply mt-3 grid w-fit max-w-full gap-1.5 rounded-r-lg px-3 py-2.5 text-xs; background: #0b171ed9; border-left: 2px solid #42e7b6; color: #e3edf2; }
+.academic-student { @apply flex flex-wrap items-baseline gap-x-2.5 gap-y-1; }
+.academic-student strong { @apply text-sm; }
+.academic-id { @apply rounded px-1.5 py-0.5 text-[11px] font-semibold; background: #153932; color: #87f1cf; }
+.academic-header dl { @apply grid gap-1; }
+.academic-header dl > div { @apply flex flex-wrap items-baseline gap-x-2; }
+.academic-header dt { color: #a8bcc8; }
+.academic-header dt::after { content: ":"; }
 .hero-description { @apply mt-3 max-w-[480px] text-sm leading-relaxed; color: var(--muted); }
 .hero-illustrated .hero-description { color: #b1c3d0; }
 .workbench { @apply grid min-w-0 items-start gap-5; }
@@ -272,6 +280,8 @@ input:focus, select:focus { border-color: var(--accent); outline-offset: 1px; }
   .hero, .hero-illustrated { min-height: 0; padding: 10px 0; color: var(--text); background: white; border: 0; }
   .hero-illustrated::after { display: none; }
   .hero-kicker, .hero-illustrated .hero-description { color: var(--muted); }
+  .academic-header, .academic-id { background: transparent; color: var(--text); }
+  .academic-header dt { color: var(--muted); }
   .panel { margin-bottom: 12px; }
   .metric, .chart, .formula-box, .math-steps li, .print-parameters tr { break-inside: avoid; }
   .print-parameters { display: block; padding: 16px; }

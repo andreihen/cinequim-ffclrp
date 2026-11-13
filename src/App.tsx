@@ -210,6 +210,13 @@ function App() {
             <div className="hero-content">
               <p className="hero-kicker"><FlaskConical size={14} /> Laboratório Interativo de Cinética Química</p>
               <h1>{title}</h1>
+              {page === 'rate' && <div className="academic-header" role="group" aria-label="Identificação acadêmica">
+                <p className="academic-student"><strong>Adriane Camille Oliveira Silva</strong><span className="academic-id">16831320</span></p>
+                <dl>
+                  <div><dt>Matéria</dt><dd>Cinética Química</dd></div>
+                  <div><dt>Docente</dt><dd>Prof. Dr. Fritz Cavalcante Huguenin</dd></div>
+                </dl>
+              </div>}
               <p className="hero-description">{modules[experiment.module].description}</p>
             </div>
           </section>
