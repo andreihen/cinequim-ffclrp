@@ -3,9 +3,7 @@ import {
   Activity, ArrowRight, BookOpen, Calculator, ChevronRight, Clock3, Download, FlaskConical,
   FolderOpen, GitBranch, Menu, Moon, RotateCcw, Save, Sun, Table2, Upload, X,
 } from 'lucide-react'
-import { Remove } from './components/Fields'
 import { Results } from './components/Results'
-import { examples } from './examples/library'
 import { useRecords } from './hooks/useRecords'
 import { Editor } from './pages/Editors'
 import { csv, download, moduleNames, readExperiment, serializeExperiment, startingInputs, type Experiment, type ModuleId, type RecordEntry } from './utils/experiments'
@@ -18,21 +16,13 @@ const modules = {
   integrated: { icon: Activity, action: 'Calcular concentração', description: 'Obtenha a concentração e a meia-vida para reações de ordem zero, primeira e segunda.', formula: '-\\frac{d[A]}{dt} = k[A]^n' },
 }
 
-const library = {
-  examples: { icon: BookOpen, title: 'Biblioteca de exemplos' },
-  history: { icon: Clock3, title: 'Histórico de cálculos' },
-  saved: { icon: FolderOpen, title: 'Experimentos salvos' },
-}
-
-type Page = ModuleId | keyof typeof library
-const moduleIds = Object.keys(modules) as ModuleId[]
-const libraryIds = Object.keys(library) as (keyof typeof library)[]
-const isModule = (page: Page): page is ModuleId => moduleIds.includes(page as ModuleId)
-const pageName = (page: Page) => isModule(page) ? moduleNames[page] : library[page].title
+type Page = 'rate'
+const moduleIds: Page[] = ['rate']
+const isModule = (page: string): page is Page => page === 'rate'
+const pageName = () => moduleNames.rate
 
 function currentPage(): Page {
-  const page = window.location.hash.slice(1) as Page
-  return isModule(page) || libraryIds.includes(page as keyof typeof library) ? page : 'rate'
+  return 'rate'
 }
 
 function defaultTheme() {
@@ -101,7 +91,7 @@ function App() {
 
   function load(next: Experiment) {
     change(next)
-    navigate(next.module)
+    navigate('rate')
   }
 
   function entry(next: Experiment): RecordEntry {
@@ -140,6 +130,7 @@ function App() {
   async function importFile(file: File) {
     try {
       const next = await readExperiment(file)
+      if (next.module !== 'rate') throw new Error('Selecione um arquivo da calculadora de lei de velocidade.')
       load(next)
       setNotice({ text: 'Experimento importado.' })
     } catch (problem) {
@@ -152,7 +143,7 @@ function App() {
   }
 
   const openFile = () => fileInput.current?.click()
-  const title = pageName(page)
+  const title = pageName()
 
   return <div className="shell">
     <a className="skip-link" href="#workspace" onClick={(event) => { event.preventDefault(); document.getElementById('workspace')?.focus() }}>Ir ao conteúdo</a>
@@ -173,12 +164,6 @@ function App() {
           {moduleIds.map((id) => {
             const Icon = modules[id].icon
             return <a key={id} href={'#' + id} aria-current={page === id ? 'page' : undefined} onClick={(event) => { event.preventDefault(); navigate(id) }}><Icon size={18} /><span>{moduleNames[id]}</span>{page === id && <ChevronRight className="nav-arrow" size={15} />}</a>
-          })}
-        </div>
-        <div className="nav-group"><p>ESPAÇO DE TRABALHO</p>
-          {libraryIds.map((id) => {
-            const { icon: Icon, title: label } = library[id]
-            return <a key={id} href={'#' + id} aria-current={page === id ? 'page' : undefined} onClick={(event) => { event.preventDefault(); navigate(id) }}><Icon size={18} /><span>{label}</span>{page === id && <ChevronRight className="nav-arrow" size={15} />}</a>
           })}
         </div>
       </nav>
@@ -219,7 +204,7 @@ function App() {
               <p className="hero-description">{modules[experiment.module].description}</p>
             </div>
           </section>
-          <div className={'workbench ' + (page === 'mechanism' || page === 'experimental' ? 'workbench-wide' : '')}>
+          <div className={'workbench ' + (false ? 'workbench-wide' : '')}>
             <section className="panel input-panel" aria-labelledby="input-title">
               <div className="panel-header">
                 <span className="panel-icon"><FlaskConical size={19} /></span>
@@ -240,40 +225,9 @@ function App() {
             </div>
           </div>
           <div className="workspace-footer">
-            <button className="button text-button" type="button" onClick={() => navigate('examples')}><BookOpen size={16} /> Ver exemplos <ChevronRight size={15} /></button>
             <button className="button text-button" type="button" onClick={() => exportJson(experiment)}><Download size={16} /> Exportar JSON</button>
           </div>
-        </> : <>
-          <section className="hero"><div className="hero-content">
-            <h1>{title}</h1>
-            <p className="hero-description">{page === 'examples' ? 'Carregue um cenário para demonstrar os cálculos do cineQUIM - FFCLRP.' : 'Abra um experimento armazenado neste navegador.'}</p>
-          </div></section>
-          {page === 'examples' ? <div className="example-grid">{examples.map(({ title: label, description, experiment: example }) => {
-            const Icon = modules[example.module].icon
-            return <article className="panel example-card" key={label}>
-              <span className="panel-icon"><Icon size={20} /></span><small>{moduleNames[example.module]}</small>
-              <h2>{label}</h2><p>{description}</p>
-              <button className="button secondary" onClick={() => load(example)}>Carregar exemplo <ArrowRight size={16} /></button>
-            </article>
-          })}</div> : <div className="record-list">
-            {(page === 'saved' ? saved : history).entries.length === 0 && <div className="panel empty-record"><FolderOpen size={28} />
-              <h2>{page === 'saved' ? 'Nenhum experimento salvo' : 'Nenhum cálculo no histórico'}</h2>
-              <button type="button" className="button secondary" onClick={() => navigate('rate')}>Abrir calculadora <ArrowRight size={16} /></button>
-            </div>}
-            {(page === 'saved' ? saved : history).entries.map((item) => <article className="panel record" key={item.id}>
-              <div><h2>{item.label}</h2><time dateTime={item.date}>{new Date(item.date).toLocaleString('pt-BR', { dateStyle: 'medium', timeStyle: 'short' })}</time></div>
-              <div className="record-actions">
-                <button className="button secondary" type="button" onClick={() => load(item)}>Abrir</button>
-                <button className="icon-button" type="button" title="Exportar JSON" aria-label="Exportar JSON" onClick={() => exportJson(item)}><Download size={17} /></button>
-                <Remove label="Remover registro" onClick={() => {
-                  const records = page === 'saved' ? saved : history
-                  try { records.update(records.entries.filter(({ id }) => id !== item.id)) }
-                  catch { setNotice({ text: 'O navegador não conseguiu remover o registro.', error: true }) }
-                }} />
-              </div>
-            </article>)}
-          </div>}
-        </>}
+        </> : null}
       </main>
     </div>
     {notice && <div role={notice.error ? 'alert' : 'status'} className={'toast ' + (notice.error ? 'toast-error' : '')}>

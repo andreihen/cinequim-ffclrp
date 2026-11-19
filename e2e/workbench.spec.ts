@@ -27,24 +27,6 @@ test('calcula velocidade, inverte a lei e trata entradas inválidas', async ({ p
   await expectNoOverflow(page)
 })
 
-test('ajusta ensaios e simula um exemplo reversível com gráficos', async ({ page }) => {
-  await page.goto('./')
-  await navigate(page, 'Dados experimentais')
-  await page.getByRole('button', { name: 'Ajustar lei de velocidade' }).click()
-  await expect(page.getByText('Ordem em B', { exact: true })).toBeVisible()
-  await expect(page.locator('.recharts-scatter-symbol')).toHaveCount(4)
-  await navigate(page, 'Biblioteca de exemplos')
-  await page.getByRole('article').filter({ hasText: 'Equilíbrio reversível' }).getByRole('button', { name: 'Carregar exemplo' }).click()
-  await page.getByRole('button', { name: 'Simular mecanismo' }).click()
-  await expect(page.getByText('[B] final', { exact: true })).toBeVisible()
-  await expect(page.locator('.recharts-line-curve')).toHaveCount(2)
-  const series = page.getByRole('button', { name: 'B', exact: true })
-  await series.click()
-  await expect(series).toHaveAttribute('aria-pressed', 'false')
-  await expect(page.locator('.recharts-line-curve')).toHaveCount(1)
-  await expectNoOverflow(page)
-})
-
 test('salva, restaura, importa e exporta um cálculo', async ({ page }) => {
   await page.goto('./')
   await page.getByRole('button', { name: 'Ativar tema claro' }).click()
@@ -52,7 +34,6 @@ test('salva, restaura, importa e exporta um cálculo', async ({ page }) => {
   await expect(page.getByRole('status')).toContainText('Experimento salvo')
   await page.reload()
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
-  await navigate(page, 'Experimentos salvos')
   const jsonDownload = page.waitForEvent('download')
   await page.getByRole('button', { name: 'Exportar JSON' }).click()
   const file = await jsonDownload
@@ -66,14 +47,5 @@ test('salva, restaura, importa e exporta um cálculo', async ({ page }) => {
   await page.emulateMedia({ media: 'print' })
   await expect(page.getByRole('heading', { name: 'Parâmetros e dados de entrada' })).toBeVisible()
   await page.emulateMedia({ media: 'screen' })
-  await navigate(page, 'Histórico de cálculos')
-  await expect(page.getByRole('article')).toHaveCount(1)
 })
 
-test('executa as leis integradas', async ({ page }) => {
-  await page.goto('./#integrated')
-  await page.getByRole('button', { name: 'Calcular concentração' }).click()
-  await expect(page.getByText('Meia-vida', { exact: true })).toBeVisible()
-  await expect(page.locator('.recharts-line-curve')).toHaveCount(1)
-  await expectNoOverflow(page)
-})
